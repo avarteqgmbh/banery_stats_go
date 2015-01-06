@@ -8,6 +8,12 @@ import (
 func Run() {
 	logger := Logger()
 
+
+  if len(ApiToken()) == 0 {
+    logger("Set KANBANERY_API_TOKEN to your personal kanbanery API token")
+    return
+  }
+
 	ownUserId := GetOwnUserId()
 	workspaces := GetWorkspaces()
 	for _, workspace := range workspaces {
