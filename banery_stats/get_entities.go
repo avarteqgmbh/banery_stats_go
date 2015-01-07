@@ -7,7 +7,6 @@ import (
 
 const (
   WORKSPACE_URL string = "https://kanbanery.com/api/v1/user/workspaces.json/"
-  USER_URL string = "https://avarteq.kanbanery.com/api/v1/user.json"
 )
 
 func GetWorkspaces() []Workspace {
@@ -35,8 +34,9 @@ func FilterTasks(tasks []Task, ownId OwnId) []Task {
 	return ownProjects
 }
 
-func GetOwnUserId() OwnId {
+func GetOwnUserId(any_workspace_name string) OwnId {
 	ownId := OwnId{}
-	json.Unmarshal(FetchBody(USER_URL), &ownId)
+  user_url := "https://" + any_workspace_name + ".kanbanery.com/api/v1/user.json"
+	json.Unmarshal(FetchBody(user_url), &ownId)
 	return ownId
 }

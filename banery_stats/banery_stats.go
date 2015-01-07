@@ -14,8 +14,14 @@ func Run() {
     return
   }
 
-	ownUserId := GetOwnUserId()
 	workspaces := GetWorkspaces()
+  if len(workspaces) == 0 {
+    logger("No workspaces present.")
+    return
+  }
+
+  ownUserId := GetOwnUserId(workspaces[0].Name)
+
 	for _, workspace := range workspaces {
 		logger("WORKSPACE " + workspace.Name + " #projects: " + fmt.Sprintf("%v", len(workspace.Projects)))
 		for _, project := range workspace.Projects {
