@@ -14,18 +14,23 @@ func Run() {
     return
   }
 
-	workspaces := GetWorkspaces()
+  workspaceClient := ClientWithKeyForWorkspaceApi(ApiToken())
+	workspaces := GetWorkspaces(workspaceClient)
   if len(workspaces) == 0 {
     logger("No workspaces present.")
     return
   }
 
-  ownUserId := GetOwnUserId(workspaces[0].Name)
+
+  ownUserIdClient := ClientWithKeyAndWorkspaceName(ApiToken(), workspaces[0].Name)
+  ownUserId := GetOwnUserId(ownUserIdClient)
 
 	for _, workspace := range workspaces {
 		logger("WORKSPACE " + workspace.Name + " #projects: " + fmt.Sprintf("%v", len(workspace.Projects)))
+
+    client := ClientWithKeyAndWorkspaceName(ApiToken(), workspace.Name)
 		for _, project := range workspace.Projects {
-			project_tasks := GetOwnProjectTasks(workspace.Name, project.Id, ownUserId)
+			project_tasks := GetOwnProjectTasks(client, project.Id, ownUserId)
 			project_tasks_length := len(project_tasks)
 			if project_tasks_length > 0 {
 				logger(fmt.Sprintf("%5v", project_tasks_length) + " " + project.Name)

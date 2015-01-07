@@ -2,25 +2,18 @@ package banery_stats
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
-const (
-  WORKSPACE_URL string = "https://kanbanery.com/api/v1/user/workspaces.json/"
-)
-
-func GetWorkspaces() []Workspace {
+func GetWorkspaces(c *Client) []Workspace {
 	workspaces := make([]Workspace, 0)
-	json.Unmarshal(FetchBody(WORKSPACE_URL), &workspaces)
-
+	json.Unmarshal(c.FetchBody("user/workspaces.json/"), &workspaces)
 	return workspaces
 }
 
-func GetOwnProjectTasks(workspaceName string, projectId int, ownId OwnId) []Task {
-	url := "https://" + workspaceName + ".kanbanery.com/api/v1/projects/" + fmt.Sprintf("%v", projectId) + "/tasks.json"
-
+func GetOwnProjectTasks(client *Client, projectId int, ownId OwnId) []Task {
+	url_path := client.OwnProjectTasksURLPath(projectId, ownId)
 	tasks := make([]Task, 0)
-	json.Unmarshal(FetchBody(url), &tasks)
+	json.Unmarshal(client.FetchBody(url_path), &tasks)
 	return FilterTasks(tasks, ownId)
 }
 
@@ -34,9 +27,8 @@ func FilterTasks(tasks []Task, ownId OwnId) []Task {
 	return ownProjects
 }
 
-func GetOwnUserId(any_workspace_name string) OwnId {
+func GetOwnUserId(client *Client) OwnId {
 	ownId := OwnId{}
-  user_url := "https://" + any_workspace_name + ".kanbanery.com/api/v1/user.json"
-	json.Unmarshal(FetchBody(user_url), &ownId)
+  json.Unmarshal(client.FetchBody("user.json"), &ownId)
 	return ownId
 }
