@@ -32,6 +32,6 @@ func FilterTasks(tasks []Task, ownId OwnId) []Task {
 
 func GetOwnUserId(client *Client) OwnId {
 	ownId := OwnId{}
-  json.Unmarshal(client.FetchBody("user.json"), &ownId)
+  	json.Unmarshal(client.FetchBody("user.json"), &ownId)
 	return ownId
 }
