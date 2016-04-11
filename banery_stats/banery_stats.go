@@ -35,10 +35,21 @@ func ApiToken() string {
 func outputWorkspace(logger func(string), workspace Workspace, ownUserId OwnId) {
 	logger("WORKSPACE " + workspace.Name + " #projects: " + fmt.Sprintf("%v", len(workspace.Projects)))
 
+
 	client := ClientWithKeyAndWorkspaceName(ApiToken(), workspace.Name)
+	project_chan := make(chan Project)
+
 	for _, project := range workspace.Projects {
-		project_tasks := GetOwnProjectTasks(client, project.Id, ownUserId)
-		project_tasks_length := len(project_tasks)
+		go GetOwnProjectTasks(client, project, ownUserId, project_chan)
+		//project_tasks := GetOwnProjectTasks(client, project.Id, ownUserId, project_chan)
+		/*project_tasks_length := len(project_tasks)
+		if project_tasks_length > 0 {
+			logger(fmt.Sprintf("%5v", project_tasks_length) + " " + project.Name)
+		}*/
+	}
+	for {
+		project := <-project_chan
+		project_tasks_length := len(project.Tasks)
 		if project_tasks_length > 0 {
 			logger(fmt.Sprintf("%5v", project_tasks_length) + " " + project.Name)
 		}

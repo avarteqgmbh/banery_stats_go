@@ -10,11 +10,14 @@ func GetWorkspaces(c *Client) []Workspace {
 	return workspaces
 }
 
-func GetOwnProjectTasks(client *Client, projectId int, ownId OwnId) []Task {
-	url_path := client.OwnProjectTasksURLPath(projectId, ownId)
+func GetOwnProjectTasks(client *Client, project Project, ownId OwnId, project_chan chan Project) Project {
+	url_path := client.OwnProjectTasksURLPath(project.Id, ownId)
 	tasks := make([]Task, 0)
 	json.Unmarshal(client.FetchBody(url_path), &tasks)
-	return FilterTasks(tasks, ownId)
+	filtered_tasks := FilterTasks(tasks, ownId)
+	project.Tasks = filtered_tasks
+	project_chan <- project
+	return project
 }
 
 func FilterTasks(tasks []Task, ownId OwnId) []Task {

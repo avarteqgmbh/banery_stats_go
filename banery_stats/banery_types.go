@@ -9,6 +9,7 @@ type (
 	Project struct {
 		Id   int    `json:"id"`
 		Name string `json:"name"`
+		Tasks []Task `json:"Tasks"`
 	}
 
 	Workspace struct {
