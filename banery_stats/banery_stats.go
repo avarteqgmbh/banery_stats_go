@@ -4,7 +4,17 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"flag"
 )
+
+
+var API_TOKEN *string
+
+func init() {
+	API_TOKEN = flag.String("t", "", "Kanbanery API token")
+	flag.Parse()
+}
+
 
 func Run() {
 	logger := Logger()
@@ -36,7 +46,11 @@ func Run() {
 }
 
 func ApiToken() string {
-	return os.Getenv("KANBANERY_API_TOKEN")
+	env_api_token := os.Getenv("KANBANERY_API_TOKEN")
+	if len(env_api_token) == 0 && len(*API_TOKEN) != 0 {
+		return *API_TOKEN
+	}
+	return env_api_token
 }
 
 
