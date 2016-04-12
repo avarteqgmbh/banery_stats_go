@@ -10,3 +10,10 @@ banery_stats_go
 ```
 brew install --HEAD https://raw.githubusercontent.com/gogolok/brew_formulas/master/banery_stats_go.rb
 ```
+
+# Release
+You need to add your github api token as GITHUB_TOKEN in your environment variables in order to run the release script.
+
+```bash
+sh ./bin/build.sh && sh ./bin/release.sh
+```
