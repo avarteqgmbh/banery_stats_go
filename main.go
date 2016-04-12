@@ -1,7 +1,7 @@
 package main
 
 import (
-	"banery_stats_go/banery_stats"
+	"github.com/avarteqgmbh/banery_stats_go/banery_stats"
 )
 
 func main() {
