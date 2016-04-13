@@ -13,5 +13,3 @@ gox -os darwin -os linux -os windows -arch amd64
 rm -rf out
 mkdir -p out
 mv banery_stats_go_* out/
-
-
